@@ -46,6 +46,7 @@
       outline-width: 0;
       font-size: 16px;
       margin-bottom: 20px;
+      color: #12181b;
     }
     .result-item {
       animation-name: appear;
@@ -204,12 +205,17 @@
         const last = splitted[splitted.length - 1];
         if (!last) {
           setSearch(search + tag + ' ');
-        } else if (last.startsWith(tag)) {
+        } else if (tag.startsWith(last)) {
           splitted.pop();
-          setSearch(splitted.join(' ') + ' ' + tag + ' ');
+          if (!splitted.length) {
+            setSearch(tag + ' ');
+          } else {
+            setSearch(splitted.join(' ') + ' ' + tag + ' ');
+          }
         } else {
           setSearch(search + ' ' + tag + '');
         }
+        document.querySelector('input').focus();
       };
 
       return html`

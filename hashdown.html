@@ -46,6 +46,7 @@
       outline-width: 0;
       font-size: 16px;
       margin-bottom: 20px;
+      color: #12181b;
     }
     .result-item {
       animation-name: appear;
@@ -126,7 +127,7 @@
     }
   </style>
   <script>
-    const sections = [{"title":"","content":"","path":"./notes/functions.md","tags":[],"id":0},{"title":"# general","content":"\ngrafw oti gamw thelw alla vazw kai #hashtags mothefukas\n","path":"./notes/functions.md","tags":[{"txt":"hashtags"}],"id":1},{"title":"## pricing is the way to go","content":"\n\nthe functions are priced.!\n`#pricing` `#functions`\n","path":"./notes/functions.md","tags":[{"txt":"pricing"},{"txt":"functions"}],"id":2},{"title":"##### Specific","content":"note it friend! #functions #update\n","path":"./notes/functions.md","tags":[{"txt":"functions"},{"txt":"update"}],"id":3},{"title":"## hash for all numbers test","content":"#tag0 #tag1 #tag2 #tag3 #tag4 #tag5 #tag6 #tag7 #tag8 #tag9 #tag10 #tag11 #tag12 #tag13 #tag14\nhello!","path":"./notes/functions.md","tags":[{"txt":"tag0"},{"txt":"tag1"},{"txt":"tag2"},{"txt":"tag3"},{"txt":"tag4"},{"txt":"tag5"},{"txt":"tag6"},{"txt":"tag7"},{"txt":"tag8"},{"txt":"tag9"},{"txt":"tag10"},{"txt":"tag11"},{"txt":"tag12"},{"txt":"tag13"},{"txt":"tag14"}],"id":4},{"title":"","content":"","path":"./notes/stripe.md","tags":[],"id":5},{"title":"# stripe","content":"\ni want to `breal` free!!\n```js\nvar = 23;\n```\n---\nnow quite there yet **son**\n\n#stripe","path":"./notes/stripe.md","tags":[{"txt":"stripe"}],"id":6}]
+    const sections = [{"title":"","content":"","path":"./notes/functions.md","tags":[],"id":0},{"title":"# general","content":"\ngrafw oti gamw thelw alla vazw kai #hashtags mothefukas\n","path":"./notes/functions.md","tags":[{"txt":"hashtags"}],"id":1},{"title":"## pricing is the way to go","content":"\n\nthe functions are priced.!\n#pricing #functions\n`hey bruh`\n","path":"./notes/functions.md","tags":[{"txt":"pricing"},{"txt":"functions"}],"id":2},{"title":"##### Specific","content":"note it friend! #functions #update\n","path":"./notes/functions.md","tags":[{"txt":"functions"},{"txt":"update"}],"id":3},{"title":"## hash for all numbers test","content":"#tag0 #tag1 #tag2 #tag3 #tag4 #tag5 \n#tag6 #tag7 #tag8 #tag9 #tag10 #tag11 #tag12 #tag13 #tag14\nhello!","path":"./notes/functions.md","tags":[{"txt":"tag0"},{"txt":"tag1"},{"txt":"tag2"},{"txt":"tag3"},{"txt":"tag4"},{"txt":"tag5"},{"txt":"tag6"},{"txt":"tag7"},{"txt":"tag8"},{"txt":"tag9"},{"txt":"tag10"},{"txt":"tag11"},{"txt":"tag12"},{"txt":"tag13"},{"txt":"tag14"}],"id":4},{"title":"","content":"","path":"./notes/stripe.md","tags":[],"id":5},{"title":"# stripe","content":"\ni want to `breal` free!!\n```js\nvar = 23;\n```\n---\nnow quite there yet **son**\n\n#stripe\nkai paei legontas\n","path":"./notes/stripe.md","tags":[{"txt":"stripe"}],"id":6},{"title":"## firebase","content":"\nwe need to fix the #issue man\n","path":"./notes/stripe.md","tags":[{"txt":"issue"}],"id":7}]
   </script>
   <script>
     const tagToClass = txt => {
@@ -204,12 +205,17 @@
         const last = splitted[splitted.length - 1];
         if (!last) {
           setSearch(search + tag + ' ');
-        } else if (last.startsWith(tag)) {
+        } else if (tag.startsWith(last)) {
           splitted.pop();
-          setSearch(splitted.join(' ') + ' ' + tag + ' ');
+          if (!splitted.length) {
+            setSearch(tag + ' ');
+          } else {
+            setSearch(splitted.join(' ') + ' ' + tag + ' ');
+          }
         } else {
           setSearch(search + ' ' + tag + '');
         }
+        document.querySelector('input').focus();
       };
 
       return html`
