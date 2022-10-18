@@ -51,6 +51,90 @@
       animation-name: appear;
       animation-duration: 0.2s;
     }
+    .suggestions {
+      padding: 12px 24px;
+      box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+      background: #12181b;
+      border-radius: 1px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+    .tag {
+      display: inline-block;
+      border-radius: 3px;
+      padding: .2em .5em .3em;
+      border-radius: 2px;
+      background: #454e56;
+      color: #b2becd;
+      font-weight: 600;
+      margin: 4px 4px;
+    }
+
+    .tag-1 {
+      background: #9166cc;
+      color: #fff;
+    }
+
+    .tag-2 {
+      background: #b2becd;
+      color: #12181b;
+    }
+
+    .tag-4 {
+      background: #2775c3;
+      color: #fff
+    }
+
+    .tag-5 {
+      background: #dc0530;
+      color: #fff
+    }
+
+    .tag-6 {
+      background: #ffcb2b;
+      color: #12181a
+    }
+
+    .tag-10 {
+      background: #498afb;
+      color: #fff
+    }
+
+    .tag-11 {
+      background: #54c5f8;
+      color: #003b6c
+    }
+
+    .tag-14 {
+      color: #fff;
+      background: #6675e0;
+    }
+
+    .tag-17 {
+      color: #fff;
+      background: #ff3e00;
+    }
+
+    .tag-18 {
+      color: #00d8ff;
+      background: #222;
+    }
+
+    .tag-20 {
+      color: #fff;
+      background-image: linear-gradient(90deg, #ff8901, #db1d5f);
+      font-weight: 700;
+    }
+
+    .tag-21 {
+      background: #fff;
+      color: #4a8afc;
+    }
+
+    .tag-23 {
+      color: #fff;
+      background: #e10097;
+    }
   </style>
   <script>
     sections = [{"title":"","content":"","path":"./notes/functions.md","tags":[],"id":0},{"title":"# general","content":"\ngrafw oti gamw thelw alla vazw kai #hashtags mothefukas\n","path":"./notes/functions.md","tags":[{"txt":"hashtags"}],"id":1},{"title":"## pricing is the way to go","content":"\n\nthe functions are priced.!\n`#pricing` `#functions`\n","path":"./notes/functions.md","tags":[{"txt":"pricing"},{"txt":"functions"}],"id":2},{"title":"##### Specific","content":"note it friend! #functions #update","path":"./notes/functions.md","tags":[{"txt":"functions"},{"txt":"update"}],"id":3},{"title":"","content":"","path":"./notes/stripe.md","tags":[],"id":4},{"title":"# stripe","content":"\ni want to `breal` free!!\n```js\nvar = 23;\n```\n---\nnow quite there yet **son**\n\n#stripe","path":"./notes/stripe.md","tags":[{"txt":"stripe"}],"id":5}]
@@ -61,14 +145,17 @@
     const { h, Component, render } = preact;
     const { useState, useEffect, useLayoutEffect } = preactHooks;
     import htm from 'https://unpkg.com/htm?module';
-  // Initialize htm with Preact
     const html = htm.bind(h);
-    // Create your app
     function App (props) {
       const [search, setSearch] = useState('');
-      // const [tags, setTags] = useState([]);
       const onChange = e => {
-        setSearch(e.target.value)
+        const v = e.target.value;
+        if (/^([a-z_A-Z]|\s)*$/.test(v)) {
+          setSearch(v)
+        } else {
+          setSearch("");
+          setSearch(search);
+        }
       }
       let results = [];
       if (search) {
@@ -90,13 +177,32 @@
       }
 
       useLayoutEffect(() => {
-        // setTimeout(() => hljs.highlightAll(), 0)
         hljs.highlightAll();
       }, [search]);
       console.log(results);
       return html`
         <div class="container">
-          <input class="search-bar" value=${search} onInput=${onChange}/>
+          <input 
+            type="text" 
+            placeholder="search for tags" 
+            class="search-bar" 
+            value=${search} 
+            onInput=${onChange}/>
+          <div class="suggestions">
+            <span class="tag tag-1">firestore 1</span>
+            <span class="tag tag-2">firestore 2</span>
+            <span class="tag tag-4">firestore 4</span>
+            <span class="tag tag-5">firestore 5</span>
+            <span class="tag tag-6">firestore 6</span>
+            <span class="tag tag-10">firestore 10</span>
+            <span class="tag tag-11">firestore 11</span>
+            <span class="tag tag-14">firestore 14</span>
+            <span class="tag tag-17">firestore 17</span>
+            <span class="tag tag-18">firestore 18</span>
+            <span class="tag tag-20">firestore 20</span>
+            <span class="tag tag-21">firestore 21</span>
+            <span class="tag tag-23">firestore 23</span>
+          </div>
           ${results.map(o => html`
             <div key=${o.id} class="result-item">
               <pre><code key=${Math.random()} class="markdown">
