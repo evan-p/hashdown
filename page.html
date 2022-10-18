@@ -96,7 +96,7 @@
       console.log(results);
       return html`
         <div class="container">
-          <input class="search-bar" value=${search} onInput=${onChange}/>
+          <input placeholder="search your markdown tags" class="search-bar" value=${search} onInput=${onChange}/>
           ${results.map(o => html`
             <div key=${o.id} class="result-item">
               <pre><code key=${Math.random()} class="markdown">
