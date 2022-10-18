@@ -43,6 +43,7 @@ const main = () => {
     const contentStr = fs.readFileSync(path).toString();
     sections.push(...parseString(contentStr, path));
   }
+  sections.forEach((s, i) => s.id = i);
   const html_page = fs.readFileSync(__dirname + '/page.html').toString();
   const html_page_with_sections = html_page.replace('//{sections}', 'sections = ' + JSON.stringify(sections));
   fs.writeFileSync(`./hashdown.html`, html_page_with_sections);

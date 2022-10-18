@@ -83,6 +83,7 @@ const parseString = (contentStr, path) => {
   
   const parseTag = () => {
     newTag();
+    currentSection.content += ch();
     for (i = i+1; i < content.length; i++) {
       if (isLetter()) {
         currentTag.txt += ch();
