@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>title</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css" integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" integrity="sha512-gU7kztaQEl7SHJyraPfZLQCNnrKdaQi5ndOyt4L4UPL/FHDd/uB9Je6KDARIqwnNNE27hnqoWLBq+Kpe4iHfeQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/androidstudio.min.css" integrity="sha512-1XN5rnQ4rhaGEfX3nlDJ4Hb7kKNMAi0+DWQ/cNf54tuuTGSs0Wyw6mbgzVxLUCQ+vxSpmzr4j87ROim2ChrYnA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/markdown.min.js" integrity="sha512-nH8y5nJsSiML9r3ksXADgdIHXwKYN41qFxthqmx82mH3ITSdD2Ul3raB2flouUnPnTFM6HsCFA0qGvJ/JYxRrg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <script>
+    //{sections}
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.5.8/preact.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.5.8/hooks.umd.js"></script>
+  <script type="module">
+    const { h, Component, render } = preact;
+    const { useState, useEffect } = preactHooks;
+    import htm from 'https://unpkg.com/htm?module';
+    console.log({
+      sections
+    })
+  // Initialize htm with Preact
+    const html = htm.bind(h);
+    // Create your app
+    function App (props) {
+      const [search, setSearch] = useState('');
+      // const [tags, setTags] = useState([]);
+      const [results, setResults] = useState([]);
+      const onChange = e => {
+        setSearch(e.target.value)
+      }
+      useEffect(() => {
+        if (!search) {
+          setResults([])
+        }
+        const tagsSet = new Set();
+        console.log(tagsSet)
+        search.split(' ').forEach(s => tagsSet.add(s));
+        const resultsScored = [];
+        sections.forEach(s => {
+          console.log(s.tags, )
+          const score = s.tags.filter(t => tagsSet.has(t.txt)).length;
+          console.log(score);
+          if (score) {
+            resultsScored.push({
+              score,
+              section: s,
+            });
+          }
+        });
+        const results = resultsScored
+          .sort((a, b) => b.score > a.score ? 1 : -1)
+          .map(o => o.section);
+        setResults(results);
+      }, [search]);
+
+      useEffect(() => {
+        hljs.highlightAll();
+      },[results]);
+
+      return html`
+        <div>
+          <input value=${search} onInput=${onChange}/>
+          ${results.map(o => html`
+            <div>
+              <pre><code class="markdown">
+                ${o.title}
+                ${o.content}</code></pre>
+            </div>`)}
+        </div>`;
+    }
+
+    render(html`<${App} />`, document.body);
+  </script>
+</head>
+
+<body></body>
+
+</html>
