@@ -58,6 +58,8 @@
       border-radius: 1px;
       max-height: 160px;
       overflow-y: auto;
+      min-height: 36px;
+      cursor: pointer;
     }
     .tag {
       display: inline-block;
@@ -69,75 +71,82 @@
       font-weight: 600;
       margin: 4px 4px;
     }
-
-    .tag-1 {
+    .tag-0 {
       background: #9166cc;
       color: #fff;
     }
-
-    .tag-2 {
+    .tag-1 {
       background: #b2becd;
       color: #12181b;
     }
-
-    .tag-4 {
+    .tag-2 {
       background: #2775c3;
       color: #fff
     }
-
-    .tag-5 {
+    .tag-3 {
       background: #dc0530;
       color: #fff
     }
-
-    .tag-6 {
+    .tag-4 {
       background: #ffcb2b;
       color: #12181a
     }
-
-    .tag-10 {
+    .tag-5 {
       background: #498afb;
       color: #fff
     }
-
-    .tag-11 {
+    .tag-6 {
       background: #54c5f8;
       color: #003b6c
     }
-
-    .tag-14 {
+    .tag-7 {
       color: #fff;
       background: #6675e0;
     }
-
-    .tag-17 {
+    .tag-8 {
       color: #fff;
       background: #ff3e00;
     }
-
-    .tag-18 {
+    .tag-9 {
       color: #00d8ff;
       background: #222;
     }
-
-    .tag-20 {
+    .tag-10 {
       color: #fff;
       background-image: linear-gradient(90deg, #ff8901, #db1d5f);
       font-weight: 700;
     }
-
-    .tag-21 {
+    .tag-11 {
       background: #fff;
       color: #4a8afc;
     }
-
-    .tag-23 {
+    .tag-12 {
       color: #fff;
       background: #e10097;
     }
   </style>
   <script>
-    sections = [{"title":"","content":"","path":"./notes/functions.md","tags":[],"id":0},{"title":"# general","content":"\ngrafw oti gamw thelw alla vazw kai #hashtags mothefukas\n","path":"./notes/functions.md","tags":[{"txt":"hashtags"}],"id":1},{"title":"## pricing is the way to go","content":"\n\nthe functions are priced.!\n`#pricing` `#functions`\n","path":"./notes/functions.md","tags":[{"txt":"pricing"},{"txt":"functions"}],"id":2},{"title":"##### Specific","content":"note it friend! #functions #update","path":"./notes/functions.md","tags":[{"txt":"functions"},{"txt":"update"}],"id":3},{"title":"","content":"","path":"./notes/stripe.md","tags":[],"id":4},{"title":"# stripe","content":"\ni want to `breal` free!!\n```js\nvar = 23;\n```\n---\nnow quite there yet **son**\n\n#stripe","path":"./notes/stripe.md","tags":[{"txt":"stripe"}],"id":5}]
+    const sections = [{"title":"","content":"","path":"./notes/functions.md","tags":[],"id":0},{"title":"# general","content":"\ngrafw oti gamw thelw alla vazw kai #hashtags mothefukas\n","path":"./notes/functions.md","tags":[{"txt":"hashtags"}],"id":1},{"title":"## pricing is the way to go","content":"\n\nthe functions are priced.!\n`#pricing` `#functions`\n","path":"./notes/functions.md","tags":[{"txt":"pricing"},{"txt":"functions"}],"id":2},{"title":"##### Specific","content":"note it friend! #functions #update\n","path":"./notes/functions.md","tags":[{"txt":"functions"},{"txt":"update"}],"id":3},{"title":"## hash for all numbers test","content":"#tag0 #tag1 #tag2 #tag3 #tag4 #tag5 #tag6 #tag7 #tag8 #tag9 #tag10 #tag11 #tag12 #tag13 #tag14\nhello!","path":"./notes/functions.md","tags":[{"txt":"tag0"},{"txt":"tag1"},{"txt":"tag2"},{"txt":"tag3"},{"txt":"tag4"},{"txt":"tag5"},{"txt":"tag6"},{"txt":"tag7"},{"txt":"tag8"},{"txt":"tag9"},{"txt":"tag10"},{"txt":"tag11"},{"txt":"tag12"},{"txt":"tag13"},{"txt":"tag14"}],"id":4},{"title":"","content":"","path":"./notes/stripe.md","tags":[],"id":5},{"title":"# stripe","content":"\ni want to `breal` free!!\n```js\nvar = 23;\n```\n---\nnow quite there yet **son**\n\n#stripe","path":"./notes/stripe.md","tags":[{"txt":"stripe"}],"id":6}]
+  </script>
+  <script>
+    const tagToClass = txt => {
+      let count = 0;
+      for (let i = 0; i < txt.length; i++) {
+        count += txt.charCodeAt(i);
+      }
+      return 'tag-' + (count%13);
+    }
+    const tagClassMap = {};
+    const tagsSet = new Set();
+    sections.forEach(s => {
+      s.tags.forEach(t => {
+        tagsSet.add(t.txt);
+      });
+    });
+    const allTags = Array.from(tagsSet);
+    for (const tag of allTags) {
+      tagClassMap[tag] = tagToClass(tag);
+    }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.5.8/preact.umd.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.5.8/hooks.umd.js"></script>
@@ -150,7 +159,7 @@
       const [search, setSearch] = useState('');
       const onChange = e => {
         const v = e.target.value;
-        if (/^([a-z_A-Z]|\s)*$/.test(v)) {
+        if (/^([a-z_A-Z0-9]|\s)*$/.test(v)) {
           setSearch(v)
         } else {
           setSearch("");
@@ -158,9 +167,11 @@
         }
       }
       let results = [];
+      let suggestions = allTags;
       if (search) {
         const tagsSet = new Set();
-        search.split(' ').forEach(s => tagsSet.add(s));
+        const splitted = search.split(' ');
+        splitted.forEach(s => tagsSet.add(s));
         const resultsScored = [];
         sections.forEach(s => {
           const score = s.tags.filter(t => tagsSet.has(t.txt)).length;
@@ -174,12 +185,33 @@
         results = resultsScored
           .sort((a, b) => b.score > a.score ? 1 : -1)
           .map(o => o.section);
+        const last = splitted[splitted.length - 1];
+        if (last) {
+          suggestions = suggestions.filter(s => s.startsWith(last));
+        }
       }
 
       useLayoutEffect(() => {
         hljs.highlightAll();
       }, [search]);
-      console.log(results);
+
+      const onTagPress = e => {
+        const tag = e.target.innerHTML;
+        const splitted = search.split(' ');
+        if (splitted.find(s => s == tag)) {
+          return;
+        }
+        const last = splitted[splitted.length - 1];
+        if (!last) {
+          setSearch(search + tag + ' ');
+        } else if (last.startsWith(tag)) {
+          splitted.pop();
+          setSearch(splitted.join(' ') + ' ' + tag + ' ');
+        } else {
+          setSearch(search + ' ' + tag + '');
+        }
+      };
+
       return html`
         <div class="container">
           <input 
@@ -189,19 +221,9 @@
             value=${search} 
             onInput=${onChange}/>
           <div class="suggestions">
-            <span class="tag tag-1">firestore 1</span>
-            <span class="tag tag-2">firestore 2</span>
-            <span class="tag tag-4">firestore 4</span>
-            <span class="tag tag-5">firestore 5</span>
-            <span class="tag tag-6">firestore 6</span>
-            <span class="tag tag-10">firestore 10</span>
-            <span class="tag tag-11">firestore 11</span>
-            <span class="tag tag-14">firestore 14</span>
-            <span class="tag tag-17">firestore 17</span>
-            <span class="tag tag-18">firestore 18</span>
-            <span class="tag tag-20">firestore 20</span>
-            <span class="tag tag-21">firestore 21</span>
-            <span class="tag tag-23">firestore 23</span>
+            ${suggestions.map(s => html`
+              <span onClick=${onTagPress} class="tag ${tagClassMap[s]}">${s}</span>
+            `)}
           </div>
           ${results.map(o => html`
             <div key=${o.id} class="result-item">

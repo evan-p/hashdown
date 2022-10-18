@@ -43,7 +43,7 @@ const parseString = (contentStr, path) => {
   newSection();
   
   const isSpace = () => /\s/.test(ch());
-  const isLetter = () => /[a-z_A-Z]/.test(ch());
+  const isLetter = () => /[a-z_A-Z0-9]/.test(ch());
   const isTitle = () => {
     if (content.slice(i, i+2).join('') == '# ') {
       return true;
@@ -67,7 +67,7 @@ const parseString = (contentStr, path) => {
   }
   const isNewLine = () => ch() == '\n';
   
-  const isTag = () => /#[a-z_A-Z]/.test(ch() + ch(i+1));
+  const isTag = () => /#[a-z_A-Z0-9]/.test(ch() + ch(i+1));
   
   const parseTitle = () => {
     new_line_space = '';
