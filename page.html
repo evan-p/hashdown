@@ -127,7 +127,8 @@
     }
   </style>
   <script>
-    //{sections}
+    const sectionsStr = "{{sections}}";
+    const sections = JSON.parse(decodeURI(sectionsStr));
   </script>
   <script>
     const tagToClass = txt => {
