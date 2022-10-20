@@ -1,6 +1,10 @@
 {
   "name": "hashdown",
-  "version": "0.1.5",
+  "version": "0.1.7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evan-p/hashdown.git"
+  },
   "description": "Populate your markdown documents in a web-page searchable by tags",
   "main": "index.js",
   "bin": "index.js",
