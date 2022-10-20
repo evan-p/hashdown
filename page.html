@@ -29,13 +29,28 @@
       flex-direction: column;
       align-items: center;
     }
+    .no-margin {
+      margin: 0;
+    }
+    .inner-right {
+      row-gap: 12px;
+      max-width: calc(50% - 10px);
+    }
     .container {
-      max-width: 800px;
       margin: 24px;
       width: 100%;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: stretch;
+      column-gap: 20px;
+    }
+    .inner-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .width-limiter {
+      max-width: 100%;
     }
     .search-bar {
       border: 0;
@@ -53,14 +68,24 @@
       animation-duration: 0.2s;
     }
     .suggestions {
-      padding: 12px 24px;
+      padding: 12px;
       box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
       background: #12181b;
       border-radius: 1px;
-      max-height: 160px;
       overflow-y: auto;
       min-height: 36px;
       cursor: pointer;
+    }
+    @media (max-width: 60em) {
+      .container {
+        flex-direction: column;
+      }
+      .inner-right {
+        max-width: unset;
+      }
+      .suggestions {
+        margin-bottom: 20px;
+      }
     }
     .tag {
       display: inline-block;
@@ -221,23 +246,27 @@
 
       return html`
         <div class="container">
-          <input 
-            type="text" 
-            placeholder="search for tags" 
-            class="search-bar" 
-            value=${search} 
-            onInput=${onChange}/>
-          <div class="suggestions">
-            ${suggestions.map(s => html`
-              <span onClick=${onTagPress} class="tag ${tagClassMap[s]}">${s}</span>
-            `)}
+          <div class="inner-container">
+            <input 
+              type="text" 
+              placeholder="search for tags" 
+              class="search-bar" 
+              value=${search} 
+              onInput=${onChange}/>
+            <div class="suggestions">
+              ${suggestions.map(s => html`
+                <span onClick=${onTagPress} class="tag ${tagClassMap[s]}">${s}</span>
+              `)}
+            </div>
           </div>
-          ${results.map(o => html`
+          <div class="inner-container inner-right">
+            ${results.map(o => html`
             <div key=${o.id} class="result-item">
-              <pre><code key=${Math.random()} class="markdown">
+              <pre class="no-margin"><code key=${Math.random()} class="markdown">
                 ${o.title}
                 ${o.content}</code></pre>
             </div>`)}
+          </div>
         </div>`;
     }
 
