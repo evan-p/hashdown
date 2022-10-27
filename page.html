@@ -263,8 +263,7 @@
             ${results.map(o => html`
             <div key=${o.id} class="result-item">
               <pre class="no-margin"><code key=${Math.random()} class="markdown">
-                ${o.title}
-                ${o.content}</code></pre>
+                ${o.title}${'\n'}${o.content}</code></pre>
             </div>`)}
           </div>
         </div>`;
